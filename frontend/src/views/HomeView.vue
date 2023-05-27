@@ -11,17 +11,30 @@
 				<h2 class="title title--small sheet__title">Выберите тесто</h2>
 
 				<div class="sheet__content dough">
-					<label class="dough__input dough__input--light">
-					<input type="radio" name="dought" value="light" class="visually-hidden" checked>
-					<b>Тонкое</b>
-					<span>Из твердых сортов пшеницы</span>
+					<label
+						v-for="dough in normalizedDoughs"
+						class="dough__input"
+						:class="`dough__input--${ dough.size }`"
+						:key="dough.id"
+					>
+							<input type="radio" name="dough"
+							:value="dough.size"
+							class="visually-hidden" checked>
+							<b>{{ dough.name}}</b>
+							<span>{{ dough.description}}</span>
 					</label>
 
-				<label class="dough__input dough__input--large">
-					<input type="radio" name="dought" value="large" class="visually-hidden">
-					<b>Толстое</b>
-					<span>Из твердых сортов пшеницы</span>
+					<!-- <label class="dough__input dough__input--light">
+						<input type="radio" name="dought" value="light" class="visually-hidden" checked>
+						<b>Тонкое</b>
+						<span>Из твердых сортов пшеницы</span>
 					</label>
+
+					<label class="dough__input dough__input--large">
+						<input type="radio" name="dought" value="large" class="visually-hidden">
+						<b>Толстое</b>
+						<span>Из твердых сортов пшеницы</span>
+					</label> -->
 				</div>
 
 				</div>
@@ -33,7 +46,20 @@
 				<h2 class="title title--small sheet__title">Выберите размер</h2>
 
 				<div class="sheet__content diameter">
-					<label class="diameter__input diameter__input--small">
+
+					<label
+						v-for="size in normalizedSizes"
+						class="diameter__input"
+						:class="`diameter__input--${ size.diametr }`"
+						:key="size.id"
+					>
+						<input type="radio" name="diameter"
+						:value="size.diametr"
+						class="visually-hidden">
+						<span>{{ size.name }}</span>
+					</label>
+
+					<!-- <label class="diameter__input diameter__input--small">
 					<input type="radio" name="diameter" value="small" class="visually-hidden">
 					<span>23 см</span>
 					</label>
@@ -44,7 +70,7 @@
 					<label class="diameter__input diameter__input--big">
 					<input type="radio" name="diameter" value="big" class="visually-hidden">
 					<span>45 см</span>
-					</label>
+					</label> -->
 				</div>
 				</div>
 			</div>
@@ -58,21 +84,51 @@
 					<div class="ingredients__sauce">
 					<p>Основной соус:</p>
 
-					<label class="radio ingredients__input">
+					<label v-for="sauce in normalizedSauces"
+						class="radio ingredients__input"
+						:key="sauce.id"
+					>
+						<input type="radio" name="sauce" :value="sauce.eng_name" checked>
+						<span>{{ sauce.name }}</span>
+					</label>
+
+
+					<!-- <label class="radio ingredients__input">
 						<input type="radio" name="sauce" value="tomato" checked>
 						<span>Томатный</span>
 					</label>
 					<label class="radio ingredients__input">
 						<input type="radio" name="sauce" value="creamy">
 						<span>Сливочный</span>
-					</label>
+					</label> -->
+
 					</div>
 
 					<div class="ingredients__filling">
 					<p>Начинка:</p>
 
 					<ul class="ingredients__list">
-						<li class="ingredients__item">
+
+						<li v-for="ingredient in normalizedIngredients"
+							class="ingredients__item"
+							:key="ingredient.id"
+						>
+						<span class="filling"
+							:class="`filling--${ ingredient.eng_name }`">{{ ingredient.name }}</span>
+
+						<div class="counter counter--orange ingredients__counter">
+							<button type="button" class="counter__button counter__button--minus" disabled>
+							<span class="visually-hidden">Меньше</span>
+							</button>
+							<input type="text" name="counter" class="counter__input" value="0">
+							<button type="button" class="counter__button counter__button--plus">
+							<span class="visually-hidden">Больше</span>
+							</button>
+						</div>
+						</li>
+
+
+						<!-- <li class="ingredients__item">
 						<span class="filling filling--mushrooms">Грибы</span>
 
 						<div class="counter counter--orange ingredients__counter">
@@ -266,7 +322,7 @@
 							<span class="visually-hidden">Больше</span>
 							</button>
 						</div>
-						</li>
+						</li> -->
 					</ul>
 
 					</div>
@@ -302,3 +358,18 @@
 		</form>
 	</main>
 </template>
+
+<script setup>
+	import doughs from '@/mocks/dough.json'
+	import sizes from '@/mocks/sizes.json'
+	import sauces from '@/mocks/sauces.json'
+	import ingredients from '@/mocks/ingredients.json'
+
+	import { normalizeDough, normalizeSize,  normalizeSauce, normalizeIngredient } from '@/common/helpers/normalize.js'
+
+	const normalizedDoughs = doughs.map(dough => normalizeDough(dough))
+	const normalizedSizes = sizes.map(size => normalizeSize(size))
+	const normalizedSauces = sauces.map(sauce => normalizeSauce(sauce))
+	const normalizedIngredients = ingredients.map(ingredient => normalizeIngredient(ingredient))
+
+</script>
