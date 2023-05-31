@@ -13,7 +13,7 @@ export const normalizeDough = dough => {
 export const normalizeSize = size => {
 	return {
 	  ...size,
-	  diameter: size.id ? sizes[size.id] : '',
+	  diametr: size.id ? sizes[size.id] : '',
 	};
 };
 
